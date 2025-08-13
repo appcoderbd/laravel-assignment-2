@@ -54,6 +54,8 @@ class CategorieController extends Controller
     public function show(categorie $categorie)
     {
         //
+        $categories = categorie::paginate(5);
+        return view('content.category-list', compact('categories'));
     }
 
     /**

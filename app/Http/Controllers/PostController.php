@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
+use App\Models\Categorie;
 use App\Models\Post;
+use Exception;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -13,6 +16,7 @@ class PostController extends Controller
     public function index()
     {
         //
+        return view('post.index');
     }
 
     /**
@@ -21,15 +25,36 @@ class PostController extends Controller
     public function create()
     {
         //
+        $categories = Categorie::get()->all();
+        return view('post.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(PostRequest $request)
     {
-        //
+
+
+        $validated = $request->validated();
+
+
+        if ($request->hasFile('post_images')) {
+            $filePath = $request->file('post_images')->store('post_images','public');
+            $validated['post_images'] = $filePath;
+        }
+
+
+        try {
+
+            Post::create($validated);
+            return redirect()->back()->with('status','Post Create Successfully');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['status' => 'Post Create Failed']);
+        }
     }
+
 
     /**
      * Display the specified resource.

@@ -54,7 +54,7 @@ class CategorieController extends Controller
     public function show(categorie $categorie)
     {
         //
-        $categories = categorie::paginate(5);
+        $categories = categorie::paginate(10);
         return view('content.category-list', compact('categories'));
     }
 
@@ -80,5 +80,8 @@ class CategorieController extends Controller
     public function destroy(categorie $categorie)
     {
         //
+        $categorie->delete();
+        return redirect()->back()->with('status', 'Category Delete Successfully');
+
     }
 }

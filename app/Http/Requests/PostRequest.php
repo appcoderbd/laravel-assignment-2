@@ -26,7 +26,7 @@ class PostRequest extends FormRequest
             'category_id' => 'required|integer|exists:categories,id',
             'title' => 'required|string|max:70',
             'content' => 'nullable|max:300',
-            'post_images' => 'nullable|image|mimes:png,jpg,jpeg,gif'
+            'post_images' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048'
         ];
     }
 
@@ -50,6 +50,7 @@ class PostRequest extends FormRequest
             // post_images
             'post_images.image' => 'The uploaded file must be an image.',
             'post_images.mimes' => 'The image must be a file of type: png, jpg, jpeg, gif.',
+            'post_images.size' => 'The image must be 2MB size.',
         ];
     }
 }

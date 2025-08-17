@@ -32,5 +32,15 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function($view){
             $view->with('postCount', Post::count());
         });
+
+        // Category Item All-------
+        View::composer('*', function($view){
+            $view->with('categories', Categorie::get()->all());
+        });
+
+        // Latest 5 Post is Dashboard
+        View::composer('*', function($view){
+            $view->with('latestPosts', Post::latest()->take(5)->get());
+        });
     }
 }

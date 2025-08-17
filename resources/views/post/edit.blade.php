@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title','Create Post')
 
+@section('title', 'Update Post')
 
 @section('content')
 
@@ -8,8 +8,8 @@
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
 
     <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold text-center text-blue-600 mb-4">Create Post</h1>
-        <p class="text-gray-700 text-center mb-6">Create a dummy post 🚀</p>
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-4">Update Post</h1>
+        <p class="text-gray-700 text-center mb-6">Update your dummy post 🚀</p>
 
         @if (session('status'))
         <div class="mb-4 p-3 text-green-700 bg-green-100 rounded-lg border border-green-300">
@@ -17,13 +17,14 @@
         </div>
         @endif
 
-        <form class="space-y-5" method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
+        <form class="space-y-5" method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
 
             <!-- Title -->
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Title</label>
-                <input type="text" name="title" placeholder="Enter post title"
+                <input type="text" name="title" placeholder="Enter post title" value="{{ $post->title }}"
                     class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
@@ -36,9 +37,11 @@
                 <label class="block text-gray-700 font-medium mb-2">Category</label>
                 <select name="category_id"
                     class="w-full px-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option disabled selected >Select a category</option>
                     @foreach ($categories as $categorie)
-                        <option value="{{ $categorie->id }}" >{{ $categorie->name }}</option>
+                        <option value="{{ $categorie->id }}"
+                            {{ $post->category_id == $categorie->id ? 'selected' : '' }}>
+                            {{ $categorie->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -51,7 +54,7 @@
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Description</label>
                 <textarea name="content" rows="4" placeholder="Write your description..."
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">{{ $post->content }}</textarea>
             </div>
             @error('content')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -83,7 +86,7 @@
             <div class="flex justify-end space-x-3">
                 <button type="submit"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 gap-2 rounded-lg shadow-md transition">
-                    Create Post
+                    Update Post
                 </button>
                  <a href="{{ route('posts.index') }}"
                     class="bg-violet-500 hover:bg-violet-600 text-white px-6 py-2 gap-3 rounded-lg shadow-md transition">
@@ -93,7 +96,5 @@
         </form>
     </div>
 </div>
-
-
 
 @endsection

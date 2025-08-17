@@ -7,6 +7,7 @@ use App\Models\Categorie;
 use App\Models\Post;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -49,7 +50,7 @@ class PostController extends Controller
         try {
 
             Post::create($validated);
-            return redirect()->back()->with('status','Post Create Successfully');
+            return redirect()->route('posts.index')->with('status','Post Create Successfully');
 
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['status' => 'Post Create Failed']);
@@ -71,14 +72,40 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
+        return view('post.edit', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        $validated = $request->validated();
+
+        if ($request->hasFile('post_images')) {
+            // আগের ইমেজ থাকলে ডিলিট করো
+            $oldImagePath = public_path($post->post_images); // কারণ ডাটাবেসে পাথসহ সেভ করা আছে
+            if ($post->post_images && file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+
+            // নতুন ইমেজ সেভ করো
+            $file = $request->file('post_images');
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension(); // unique name
+            $filePath = 'post_images/' . $fileName; // ডাটাবেসে পাথসহ সেভ হবে
+
+            $file->move(public_path('post_images'), $fileName);
+
+            $validated['post_images'] = $filePath;
+        } else {
+            // নতুন ইমেজ না দিলে আগেরটাই থাকবে
+            $validated['post_images'] = $post->post_images;
+        }
+
+        $post->update($validated);
+
+        return redirect()->route('posts.index')->with('status', 'Post updated successfully 🚀');
+
     }
 
     /**
@@ -87,5 +114,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+        $post->delete();
+        return redirect()->back()->with('success','Post Delete Successfully');
     }
 }

@@ -71,7 +71,7 @@
     </div>
         <div class="px-6 py-8">
             <div class="px-6 py-8 flex items-center justify-between">
-                <h1 class="text-2xl font-bold">All Categories</h1>
+                <h1 class="text-2xl font-bold">All Post</h1>
                 <a href="{{ route('posts.create') }}" class="bg-sky-500 hover:bg-sky-700 px-4 py-2 rounded-2xl text-white">
                     Create New Post
                 </a>

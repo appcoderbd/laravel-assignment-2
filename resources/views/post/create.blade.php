@@ -23,7 +23,7 @@
             <!-- Title -->
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Title</label>
-                <input type="text" name="title" placeholder="Enter post title"
+                <input type="text" name="title" placeholder="Enter post title" value="{{ old('title') }}"
                     class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
@@ -36,7 +36,7 @@
                 <label class="block text-gray-700 font-medium mb-2">Category</label>
                 <select name="category_id"
                     class="w-full px-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option disabled selected >Select a category</option>
+                    <option disabled {{ old('category_id') ? '' : 'selected' }}>Select a category</option>
                     @foreach ($categories as $categorie)
                         <option value="{{ $categorie->id }}" >{{ $categorie->name }}</option>
                     @endforeach
@@ -51,7 +51,7 @@
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Description</label>
                 <textarea name="content" rows="4" placeholder="Write your description..."
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">{{ old('content') }}</textarea>
             </div>
             @error('content')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
